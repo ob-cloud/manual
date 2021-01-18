@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>微信分享 | 昂宝前端手册</title>
+    <meta name="generator" content="VuePress 1.8.0">
+    
+    <meta name="description" content="">
+    
+    <link rel="preload" href="/manual/assets/css/0.styles.c1941655.css" as="style"><link rel="preload" href="/manual/assets/js/app.bc26fada.js" as="script"><link rel="preload" href="/manual/assets/js/2.6adc95dc.js" as="script"><link rel="preload" href="/manual/assets/js/15.881783d1.js" as="script"><link rel="prefetch" href="/manual/assets/js/10.066938a3.js"><link rel="prefetch" href="/manual/assets/js/11.6d2db7a1.js"><link rel="prefetch" href="/manual/assets/js/12.771ca04f.js"><link rel="prefetch" href="/manual/assets/js/13.c1b195ff.js"><link rel="prefetch" href="/manual/assets/js/14.fdf083d8.js"><link rel="prefetch" href="/manual/assets/js/3.e258616e.js"><link rel="prefetch" href="/manual/assets/js/4.ff556169.js"><link rel="prefetch" href="/manual/assets/js/5.b9cf1536.js"><link rel="prefetch" href="/manual/assets/js/6.6ec71d73.js"><link rel="prefetch" href="/manual/assets/js/7.79a1da67.js"><link rel="prefetch" href="/manual/assets/js/8.1cb5539f.js"><link rel="prefetch" href="/manual/assets/js/9.8e1353b7.js">
+    <link rel="stylesheet" href="/manual/assets/css/0.styles.c1941655.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-navbar"><!----> <div class="sidebar-mask"></div> <aside class="sidebar"><!---->  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>前端手册</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/manual/guide/0-home.html" class="sidebar-link">首页概览</a></li><li><a href="/manual/guide/1-branch.html" class="sidebar-link">分支管理</a></li><li><a href="/manual/guide/2-commit.html" class="sidebar-link">提交规范</a></li><li><a href="/manual/guide/3-style.html" class="sidebar-link">样式规范</a></li><li><a href="/manual/guide/4-git-usage.html" class="sidebar-link">Git使用</a></li><li><a href="/manual/guide/5-how-to-use-sourceTree.html" class="sidebar-link">source-tree使用</a></li><li><a href="/manual/guide/6-how-to-use-gitlab-github-together.html" class="sidebar-link">gitlab与github同时使用</a></li><li><a href="/manual/guide/7-how-to-use-wechat-share.html" aria-current="page" class="active sidebar-link">微信分享</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/manual/guide/7-how-to-use-wechat-share.html#示例使用" class="sidebar-link">示例使用</a></li></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="微信分享"><a href="#微信分享" class="header-anchor">#</a> 微信分享</h1> <div class="custom-block tip"><p class="custom-block-title">描述</p> <p>微信分享示例</p></div> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">import</span> wx <span class="token keyword">from</span> <span class="token string">'weixin-js-sdk'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> getWechatConfigFromServer <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'serverApi'</span>
+
+<span class="token comment">// 初始化</span>
+<span class="token keyword">const</span> <span class="token function-variable function">WechatInit</span> <span class="token operator">=</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">const</span> config <span class="token operator">=</span> <span class="token keyword">await</span> <span class="token function">getWechatConfigFromServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    wx<span class="token punctuation">.</span><span class="token function">config</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      debug<span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      appId<span class="token operator">:</span> config<span class="token punctuation">.</span>appId<span class="token punctuation">,</span> <span class="token comment">// 必填，公众号的唯一标识</span>
+      timestamp<span class="token operator">:</span> config<span class="token punctuation">.</span>timestamp<span class="token punctuation">,</span> <span class="token comment">// 必填，生成签名的时间戳</span>
+      nonceStr<span class="token operator">:</span> config<span class="token punctuation">.</span>nonceStr<span class="token punctuation">,</span> <span class="token comment">// 必填，生成签名的随机串</span>
+      signature<span class="token operator">:</span> config<span class="token punctuation">.</span>signature<span class="token punctuation">,</span> <span class="token comment">// 必填，签名，见附录1</span>
+      jsApiList<span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token comment">// 必填，需要使用的JS接口列表，所有JS接口列表见附录2</span>
+        <span class="token string">'onMenuShareAppMessage'</span><span class="token punctuation">,</span> <span class="token comment">// 获取“分享给朋友”按钮点击状态及自定义分享内容接口</span>
+        <span class="token string">'onMenuShareTimeline'</span><span class="token punctuation">,</span> <span class="token comment">// 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口</span>
+        <span class="token string">'onMenuShareQQ'</span>
+      <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    wx<span class="token punctuation">.</span><span class="token function">ready</span><span class="token punctuation">(</span><span class="token parameter">res</span> <span class="token operator">=&gt;</span> <span class="token function">resolve</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    wx<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token parameter">res</span> <span class="token operator">=&gt;</span> <span class="token function">reject</span><span class="token punctuation">(</span>res<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 微信分享到朋友圈</span>
+<span class="token keyword">const</span> <span class="token function-variable function">ShareTimeLine</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">option</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    wx<span class="token punctuation">.</span><span class="token function">onMeuShareTimeline</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      title<span class="token operator">:</span> opstion<span class="token punctuation">.</span>title<span class="token punctuation">,</span> <span class="token comment">// 分享标题</span>
+      link<span class="token operator">:</span> opstion<span class="token punctuation">.</span>link<span class="token punctuation">,</span> <span class="token comment">// 分享链接</span>
+      imgUrl<span class="token operator">:</span> opstion<span class="token punctuation">.</span>imgUrl<span class="token punctuation">,</span> <span class="token comment">// 分享图标</span>
+      success<span class="token operator">:</span> resolve<span class="token punctuation">,</span>
+      cancel<span class="token operator">:</span> reject
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 微信分享到朋友</span>
+<span class="token keyword">const</span> <span class="token function-variable function">ShareAppMessage</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">option</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    wx<span class="token punctuation">.</span><span class="token function">onMenuShareAppMessage</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      title<span class="token operator">:</span> option<span class="token punctuation">.</span>title<span class="token punctuation">,</span> <span class="token comment">// 分享标题</span>
+      desc<span class="token operator">:</span> option<span class="token punctuation">.</span>desc<span class="token punctuation">,</span> <span class="token comment">// 分享描述</span>
+      link<span class="token operator">:</span> option<span class="token punctuation">.</span>link<span class="token punctuation">,</span> <span class="token comment">// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致</span>
+      imgUrl<span class="token operator">:</span> option<span class="token punctuation">.</span>imgUrl<span class="token punctuation">,</span> <span class="token comment">// 分享图标</span>
+      type<span class="token operator">:</span> option<span class="token punctuation">.</span>type<span class="token punctuation">,</span> <span class="token comment">// 分享类型,music、video或link，不填默认为link</span>
+      dataUrl<span class="token operator">:</span> option<span class="token punctuation">.</span>dataUrl<span class="token punctuation">,</span> <span class="token comment">// 如果type是music或video，则要提供数据链接，默认为空</span>
+      success<span class="token operator">:</span> resolve<span class="token punctuation">,</span>
+      cancel<span class="token operator">:</span> reject
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// 微信分享到朋友</span>
+<span class="token keyword">const</span> <span class="token function-variable function">ShareQQMessage</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">option</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Promise</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">resolve<span class="token punctuation">,</span> reject</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+    wx<span class="token punctuation">.</span><span class="token function">onMenuShareQQ</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+      title<span class="token operator">:</span> option<span class="token punctuation">.</span>title<span class="token punctuation">,</span> <span class="token comment">// 分享标题</span>
+      desc<span class="token operator">:</span> option<span class="token punctuation">.</span>desc<span class="token punctuation">,</span> <span class="token comment">// 分享描述</span>
+      link<span class="token operator">:</span> option<span class="token punctuation">.</span>link<span class="token punctuation">,</span> <span class="token comment">// 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致</span>
+      imgUrl<span class="token operator">:</span> option<span class="token punctuation">.</span>imgUrl<span class="token punctuation">,</span> <span class="token comment">// 分享图标</span>
+      success<span class="token operator">:</span> resolve<span class="token punctuation">,</span>
+      cancel<span class="token operator">:</span> reject
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="示例使用"><a href="#示例使用" class="header-anchor">#</a> 示例使用</h2> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> shareConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+  link<span class="token operator">:</span> <span class="token string">'https://gz.on-bright.com/wx/share/fashionWeek?isApp=0'</span><span class="token punctuation">,</span>
+  title<span class="token operator">:</span> <span class="token string">'FASHION PARTY2018•LIBER时尚趴SEE NOW BUY NOW即秀即买'</span><span class="token punctuation">,</span>
+  desc<span class="token operator">:</span> <span class="token string">'LIBER时尚周开启即秀即买模式，并结合最新科技展示，同时通过线上直播及各地LIBER时尚周分会场， 同步将当季时尚发布全球...'</span><span class="token punctuation">,</span>
+  imgUrl<span class="token operator">:</span> <span class="token string">'https://public.on-bright.com/share_logo_link.png'</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+
+<span class="token function">WechatInit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+  <span class="token function">ShareAppMessage</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    title<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>title<span class="token punctuation">,</span>
+    desc<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>desc<span class="token punctuation">,</span>
+    link<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>link<span class="token punctuation">,</span>
+    imgUrl<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>imgUrl<span class="token punctuation">,</span>
+    type<span class="token operator">:</span> <span class="token string">'link'</span><span class="token punctuation">,</span>
+    dataUrl<span class="token operator">:</span> <span class="token string">''</span>
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token function">ShareTimeLine</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    title<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>title<span class="token punctuation">,</span>
+    link<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>link<span class="token punctuation">,</span>
+    imgUrl<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>imgUrl
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+  <span class="token function">ShareQQMessage</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    title<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>title<span class="token punctuation">,</span>
+    link<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>link<span class="token punctuation">,</span>
+    imgUrl<span class="token operator">:</span> shareConfig<span class="token punctuation">.</span>imgUrl
+  <span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre></div></div> <footer class="page-edit"><!----> <!----></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/manual/assets/js/app.bc26fada.js" defer></script><script src="/manual/assets/js/2.6adc95dc.js" defer></script><script src="/manual/assets/js/15.881783d1.js" defer></script>
+  </body>
+</html>
